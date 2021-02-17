@@ -1,5 +1,6 @@
 package com.seckill.springbootseckill.service.impl;
 
+import com.seckill.springbootseckill.annotation.ServiceLock;
 import com.seckill.springbootseckill.dao.DynamicQuery;
 import com.seckill.springbootseckill.model.Result;
 import com.seckill.springbootseckill.model.Seckill;
@@ -7,14 +8,25 @@ import com.seckill.springbootseckill.model.SeckillStatEnum;
 import com.seckill.springbootseckill.model.SuccessKilled;
 import com.seckill.springbootseckill.repository.SeckillRepository;
 import com.seckill.springbootseckill.service.ISeckillService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 @Service("seckillService")
 public class SeckillServiceImpl implements ISeckillService {
+
+    /**
+     * 参数代表是否是公平锁，true代表公平，false代表不公平，默认是false
+     * 公平锁：先到先得
+     * 不公平：后来也可以先得
+     */
+    Lock lock = new ReentrantLock(true);
 
     @Autowired
     DynamicQuery dynamicQuery;
@@ -91,20 +103,85 @@ public class SeckillServiceImpl implements ISeckillService {
      * @param seckillId
      * @param userId
      * @return
+     * 代码逻辑基本和秒杀一是一样的，只是在进入时上锁，运行完解锁
+     * 但还是会出现超卖的现象，因为锁是在事务里面，解锁时事务不一定提交
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result startSeckilLock(long seckillId, long userId) {
-        return null;
+        //上锁
+        lock.lock();
+        try {
+            //查询
+            String nativeSql = "SELECT number FROM seckill WHERE seckill_id=?";
+            Object object = dynamicQuery.nativeQueryObject(nativeSql,new Object[]{seckillId});
+            Long num = ((Number) object).longValue();
+
+            if (num > 0){
+                //库存扣除
+                nativeSql = "UPDATE seckill  SET number=number-1 WHERE seckill_id=?";
+                dynamicQuery.nativeExecuteUpdate(nativeSql, new Object[]{seckillId});
+                //创建订单
+                SuccessKilled killed = new SuccessKilled();
+                killed.setSeckillId(seckillId);
+                killed.setUserId(userId);
+                killed.setState((short)0);
+                killed.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                /**
+                 * 如果没有分表，可以直接使用save
+                 * 当然，可以进行水平分表进行优化
+                 * String table = "success_killed_"+userId%8;
+                 * 使用模运算，利用userId水平分表,然后insert into table 即可
+                 */
+                dynamicQuery.save(killed);
+
+            } else {
+                return Result.error(SeckillStatEnum.END);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            lock.unlock();
+        }
+        return Result.ok(SeckillStatEnum.SUCCESS);
     }
     /**
      * 秒杀 二、程序锁AOP
      * @param seckillId
      * @param userId
      * @return
+     * 这里可以通过代理模式，jdk和cglib代理都是在方法的上下进行增强，是在方法的外部进行，因而可以包围事务
+     * AOP也是通过代理模式进行实现
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    @ServiceLock
     public Result startSeckilAopLock(long seckillId, long userId) {
-        return null;
+        String nativeSql = "SELECT number FROM seckill WHERE seckill_id=?";
+        Object object = dynamicQuery.nativeQueryObject(nativeSql,new Object[]{seckillId});
+        Long num = ((Number) object).longValue();
+
+        if (num > 0){
+            //库存扣除
+            nativeSql = "UPDATE seckill  SET number=number-1 WHERE seckill_id=?";
+            dynamicQuery.nativeExecuteUpdate(nativeSql, new Object[]{seckillId});
+            //创建订单
+            SuccessKilled killed = new SuccessKilled();
+            killed.setSeckillId(seckillId);
+            killed.setUserId(userId);
+            killed.setState((short)0);
+            killed.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            //如果没有分表，可以直接使用save
+            dynamicQuery.save(killed);
+            /**
+             * 当然，可以进行水平分表进行优化
+             * String table = "success_killed_"+userId%8;
+             * 使用模运算，利用userId水平分表,然后insert into table 即可
+             */
+            return Result.ok(SeckillStatEnum.SUCCESS);
+        } else {
+            return Result.error(SeckillStatEnum.END);
+        }
     }
     /**
      * 秒杀 二、数据库悲观锁
