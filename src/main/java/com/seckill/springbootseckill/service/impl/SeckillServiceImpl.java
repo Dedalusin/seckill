@@ -146,7 +146,7 @@ public class SeckillServiceImpl implements ISeckillService {
         return Result.ok(SeckillStatEnum.SUCCESS);
     }
     /**
-     * 秒杀 二、程序锁AOP
+     * 秒杀 三、程序锁AOP
      * @param seckillId
      * @param userId
      * @return
@@ -184,37 +184,98 @@ public class SeckillServiceImpl implements ISeckillService {
         }
     }
     /**
-     * 秒杀 二、数据库悲观锁
+     * 秒杀 四、数据库悲观锁
      * @param seckillId
      * @param userId
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result startSeckilDBPCC_ONE(long seckillId, long userId) {
-        return null;
+        //悲观锁,使用SELECT ... FOR UPDATE,实际上单纯的使用UPDATE数据库也会加锁,当事务提交时进行释放
+        String nativeSql = "SELECT number FROM seckill WHERE seckill_id=? FOR UPDATE";
+        Object object = dynamicQuery.nativeQueryObject(nativeSql,new Object[]{seckillId});
+        Long num = ((Number) object).longValue();
+        if (num > 0){
+            //库存扣除
+            nativeSql = "UPDATE seckill  SET number=number-1 WHERE seckill_id=?";
+            dynamicQuery.nativeExecuteUpdate(nativeSql, new Object[]{seckillId});
+            //创建订单
+            SuccessKilled killed = new SuccessKilled();
+            killed.setSeckillId(seckillId);
+            killed.setUserId(userId);
+            killed.setState((short)0);
+            killed.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            //如果没有分表，可以直接使用save
+            dynamicQuery.save(killed);
+            /**
+             * 当然，可以进行水平分表进行优化
+             * String table = "success_killed_"+userId%8;
+             * 使用模运算，利用userId水平分表,然后insert into table 即可
+             */
+            return Result.ok(SeckillStatEnum.SUCCESS);
+        } else {
+            return Result.error(SeckillStatEnum.END);
+        }
     }
     /**
-     * 秒杀 三、数据库悲观锁
+     * 秒杀 五、数据库悲观锁
      * @param seckillId
      * @param userId
      * @return
      */
     @Override
     public Result startSeckilDBPCC_TWO(long seckillId, long userId) {
-        return null;
+        /**
+         * 对秒杀四进行了一定的优化,上面的for update加锁，update也加锁，加了两次锁
+         * 单用户抢购一件商品没有问题、但是抢购多件商品不建议这种写法 UPDATE锁表
+         */
+        String nativeSql = "UPDATE seckill  SET number=number-1 WHERE seckill_id=? AND number>0";
+        int count = dynamicQuery.nativeExecuteUpdate(nativeSql, new Object[]{seckillId});
+        if(count>0){
+            SuccessKilled killed = new SuccessKilled();
+            killed.setSeckillId(seckillId);
+            killed.setUserId(userId);
+            killed.setState((short)0);
+            killed.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            dynamicQuery.save(killed);
+            return Result.ok(SeckillStatEnum.SUCCESS);
+        }else{
+            return Result.error(SeckillStatEnum.END);
+        }
     }
     /**
-     * 秒杀 三、数据库乐观锁
+     * 秒杀 六、数据库乐观锁(Optimistic Concurrency Control,缩写“OCC”)
+     * 实际上就是CAS，比较version
+     * 注意悲观锁select需要加锁,而乐观锁select不需要加锁，可能这时候别人事务是未提交读，那么悲观锁就不行，而乐观锁可以,最后比较下版本号即可
+     * update的锁是保证sql语句的原子性,而不是对于整个上层事务都进行了加锁
      * @param seckillId
      * @param userId
      * @return
      */
     @Override
-    public Result startSeckilDBOCC(long seckillId, long userId, long number) {
-        return null;
+    public Result startSeckilDBOCC(long seckillId, long userId) {
+        Seckill seckill = seckillRepository.findById(seckillId).get();
+        if (seckill.getNumber() > 0){
+            String nativeSql = "UPDATE seckill SET number = number - 1 AND version = version+1 WHERE seckill_id=? AND version = ?";
+            int count = dynamicQuery.nativeExecuteUpdate(nativeSql, new Object[]{seckillId,seckill.getVersion()});
+            if(count>0){
+                SuccessKilled killed = new SuccessKilled();
+                killed.setSeckillId(seckillId);
+                killed.setUserId(userId);
+                killed.setState((short)0);
+                killed.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                dynamicQuery.save(killed);
+                return Result.ok(SeckillStatEnum.SUCCESS);
+            }else{
+                return Result.error(SeckillStatEnum.END);
+            }
+        }else{
+            return Result.error(SeckillStatEnum.END);
+        }
     }
     /**
-     * 秒杀 四、事物模板
+     * 秒杀 七、事物模板
      * @param seckillId
      * @param userId
      * @return

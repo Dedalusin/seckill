@@ -96,7 +96,7 @@ public class SeckillController {
         final CountDownLatch latch = new CountDownLatch(people);
         seckillService.deleteSeckill(seckillId);
         final long killId = seckillId;
-        LOGGER.info("秒杀一开始");
+        LOGGER.info("秒杀开始");
         /**
          * 开启新线程之前，将RequestAttributes对象设置为子线程共享
          * 这里仅仅是为了测试，否则 IPUtils 中获取不到 request 对象
@@ -143,7 +143,7 @@ public class SeckillController {
         final CountDownLatch latch = new CountDownLatch(people);
         seckillService.deleteSeckill(seckillId);
         final long killId = seckillId;
-        LOGGER.info("秒杀一开始");
+        LOGGER.info("秒杀开始");
         /**
          * 开启新线程之前，将RequestAttributes对象设置为子线程共享
          * 这里仅仅是为了测试，否则 IPUtils 中获取不到 request 对象
@@ -159,6 +159,102 @@ public class SeckillController {
             Runnable task = () -> {
                 try {
                     Result result = seckillService.startSeckilAopLock(seckillId,userId);
+                    if(result!=null){
+                        LOGGER.info("用户:{}{}",userId,result.get("msg"));
+                    }else{
+                        LOGGER.info("用户:{}{}",userId,"哎呦喂，人也太多了，请稍后！");
+                    }
+                }catch (Exception e ){
+                    e.printStackTrace();
+                }
+                latch.countDown();
+
+            };
+            executor.execute(task);
+        }
+        try {
+            //保证全面的线程全部处理完成
+            latch.await();
+            Long seckillCount = seckillService.getSeckillCount(seckillId);
+            LOGGER.info("一共秒杀出{}件商品",seckillCount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return Result.ok();
+    }
+    @ApiOperation(value = "秒杀四(数据库悲观锁)")
+    @PostMapping("/startFour")
+    public Result startFour(long seckillId){
+        int people = 1000;
+        //便于同步的信号量
+        final CountDownLatch latch = new CountDownLatch(people);
+        seckillService.deleteSeckill(seckillId);
+        final long killId = seckillId;
+        LOGGER.info("秒杀开始");
+        /**
+         * 开启新线程之前，将RequestAttributes对象设置为子线程共享
+         * 这里仅仅是为了测试，否则 IPUtils 中获取不到 request 对象
+         * 用到限流注解的测试用例，都需要加一下两行代码
+         */
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        RequestContextHolder.setRequestAttributes(sra, true);
+        /**
+         * 这里的for能够模拟，因为我们使用的是线程池，并不是单一线程获取阻塞队列中的元素
+         */
+        for (int i = 1; i <= people; i++){
+            long userId = i;
+            Runnable task = () -> {
+                try {
+                    //使用进行了一定优化的
+                    Result result = seckillService.startSeckilDBPCC_TWO(seckillId,userId);
+                    if(result!=null){
+                        LOGGER.info("用户:{}{}",userId,result.get("msg"));
+                    }else{
+                        LOGGER.info("用户:{}{}",userId,"哎呦喂，人也太多了，请稍后！");
+                    }
+                }catch (Exception e ){
+                    e.printStackTrace();
+                }
+                latch.countDown();
+
+            };
+            executor.execute(task);
+        }
+        try {
+            //保证全面的线程全部处理完成
+            latch.await();
+            Long seckillCount = seckillService.getSeckillCount(seckillId);
+            LOGGER.info("一共秒杀出{}件商品",seckillCount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return Result.ok();
+    }
+    @ApiOperation(value = "秒杀五(数据库乐观锁)")
+    @PostMapping("/startFive")
+    public Result startFive(long seckillId){
+        int people = 1000;
+        //便于同步的信号量
+        final CountDownLatch latch = new CountDownLatch(people);
+        seckillService.deleteSeckill(seckillId);
+        final long killId = seckillId;
+        LOGGER.info("秒杀开始");
+        /**
+         * 开启新线程之前，将RequestAttributes对象设置为子线程共享
+         * 这里仅仅是为了测试，否则 IPUtils 中获取不到 request 对象
+         * 用到限流注解的测试用例，都需要加一下两行代码
+         */
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        RequestContextHolder.setRequestAttributes(sra, true);
+        /**
+         * 这里的for能够模拟，因为我们使用的是线程池，并不是单一线程获取阻塞队列中的元素
+         */
+        for (int i = 1; i <= people; i++){
+            long userId = i;
+            Runnable task = () -> {
+                try {
+                    //使用进行了一定优化的
+                    Result result = seckillService.startSeckilDBOCC(seckillId,userId);
                     if(result!=null){
                         LOGGER.info("用户:{}{}",userId,result.get("msg"));
                     }else{
