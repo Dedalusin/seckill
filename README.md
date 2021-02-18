@@ -1,6 +1,4 @@
-# 工程简介
+## Description:
+Some seckill examples facing high concurrency scenarios
 
-
-
-# 延伸阅读
 
