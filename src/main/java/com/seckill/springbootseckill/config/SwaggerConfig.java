@@ -22,6 +22,6 @@ public class SwaggerConfig {
 	// 预览地址:swagger-ui.html
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("Spring 中使用Swagger2构建文档").termsOfServiceUrl("https://blog.52itstyle.com")
-				.contact(new Contact("cc笔记 ", "https://blog.52itstyle.vip/", "974269842@qq.com")).version("1.1").build();
+				.contact(new Contact("参考 ", "https://blog.52itstyle.vip/", "974269842@qq.com")).version("1.1").build();
 	}
 }
