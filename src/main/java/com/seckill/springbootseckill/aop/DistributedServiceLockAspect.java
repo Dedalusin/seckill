@@ -2,6 +2,7 @@ package com.seckill.springbootseckill.aop;
 
 
 import com.seckill.springbootseckill.utils.RedissLockUtil;
+import com.seckill.springbootseckill.utils.ZkLockUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,6 +29,9 @@ public class DistributedServiceLockAspect {
     @Pointcut("@annotation(com.seckill.springbootseckill.annotation.DistributedServiceLock)")
     public void distributedServicePoint(){};
 
+    @Pointcut("@annotation(com.seckill.springbootseckill.annotation.ZkLock)")
+    public void ZkLockPoint(){};
+
     @Around("distributedServicePoint()")
     public Object distributedServiceLock(ProceedingJoinPoint point){
         Boolean isLocked = false;
@@ -46,6 +50,30 @@ public class DistributedServiceLockAspect {
         } finally {
             if (isLocked){
                 RedissLockUtil.unlock(seckillId+"");
+                LOGGER.info("解锁");
+            }
+        }
+        return object;
+    }
+
+    @Around("ZkLockPoint()")
+    public Object ZkLock(ProceedingJoinPoint point){
+        Boolean isLocked = false;
+        //获取变量
+        Object[] args = point.getArgs();
+        Object object = null;
+        Long seckillId = ((Number) args[0]).longValue();
+        try {
+            LOGGER.info("准备开始对 seckillId : "+seckillId+" 上锁");
+            isLocked = ZkLockUtil.acquire(3,TimeUnit.SECONDS);
+            if (isLocked){
+                object = point.proceed();
+            }
+        }catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            if (isLocked){
+                ZkLockUtil.release();
                 LOGGER.info("解锁");
             }
         }

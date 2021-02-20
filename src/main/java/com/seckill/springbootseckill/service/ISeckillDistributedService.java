@@ -22,7 +22,7 @@ public interface ISeckillDistributedService {
 	 * @param userId 用户ID
 	 * @return
 	 */
-	Result startSeckillZksLock(long seckillId, long userId);
+	Result startSeckillZkLock(long seckillId, long userId);
 	
 	/**
 	 * 秒杀 二 多个商品

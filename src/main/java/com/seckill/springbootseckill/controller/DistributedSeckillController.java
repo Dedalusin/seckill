@@ -59,4 +59,32 @@ public class DistributedSeckillController {
         }
         return Result.ok();
     }
+
+    @ApiOperation(value = "分布式秒杀二(基于zookeeper实现)")
+    @PostMapping("/startZkLock")
+    public Result startZkLock(Long seckillId){
+        seckillService.deleteSeckill(seckillId);
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        LOGGER.info("开始秒杀");
+        for (int i=1; i <=10; i++){
+            final long userId = i;
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    Result result = seckillDistributedService.startSeckillZkLock(seckillId,userId);
+                    LOGGER.info("用户:{}{}",userId,result.get("msg"));
+                    countDownLatch.countDown();
+                }
+            };
+            executor.execute(task);
+        }
+        try {
+            countDownLatch.await();
+            Long  seckillCount = seckillService.getSeckillCount(seckillId);
+            LOGGER.info("一共秒杀出{}件商品",seckillCount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return Result.ok();
+    }
 }
