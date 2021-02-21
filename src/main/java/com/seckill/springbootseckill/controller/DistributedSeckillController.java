@@ -1,6 +1,7 @@
 package com.seckill.springbootseckill.controller;
 
 import com.seckill.springbootseckill.model.Result;
+import com.seckill.springbootseckill.queue.kafka.KafkaSender;
 import com.seckill.springbootseckill.service.ISeckillDistributedService;
 import com.seckill.springbootseckill.service.ISeckillService;
 import io.swagger.annotations.Api;
@@ -31,6 +32,8 @@ public class DistributedSeckillController {
     ISeckillDistributedService seckillDistributedService;
     @Autowired
     ISeckillService seckillService;
+    @Autowired
+    KafkaSender kafkaSender;
 
     @ApiOperation(value = "分布式秒杀一(基于Redisson实现)")
     @PostMapping("/startRedissonLock")
@@ -80,6 +83,34 @@ public class DistributedSeckillController {
         }
         try {
             countDownLatch.await();
+            Long  seckillCount = seckillService.getSeckillCount(seckillId);
+            LOGGER.info("一共秒杀出{}件商品",seckillCount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return Result.ok();
+    }
+    @ApiOperation(value = "分布式秒杀三(基于kafka队列实现)")
+    @PostMapping("/startKafkaQueue")
+    public Result startKafkaQueue(Long seckillId){
+        seckillService.deleteSeckill(seckillId);
+
+        LOGGER.info("开始秒杀");
+        for (int i=1; i <=10; i++){
+            final long userId = i;
+            Runnable task =  () -> {
+                try {
+                    kafkaSender.sendMessage("seckillKafka",seckillId+";"+userId);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            };
+            executor.execute(task);
+        }
+        try {
+            //这里使用countDownLatch进行同步没用了，consumer那边是另外的线程了，所以这里使用sleep后再进行查询
+            Thread.sleep(3000);
             Long  seckillCount = seckillService.getSeckillCount(seckillId);
             LOGGER.info("一共秒杀出{}件商品",seckillCount);
         }catch (Exception e){
