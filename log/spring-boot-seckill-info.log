@@ -1,0 +1,94 @@
+2021-02-22 13:11:23.608 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:55  - Starting SpringbootSeckillApplication on DESKTOP-K5GNTI1 with PID 128 (D:\codes\repositories\seckill\target\classes started by 迪达勒斯 in D:\codes\repositories\seckill)
+2021-02-22 13:11:23.620 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:651 - No active profile set, falling back to default profiles: default
+2021-02-22 13:11:28.425 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:249 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2021-02-22 13:11:28.426 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-02-22 13:11:28.685 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 198ms. Found 1 JPA repository interfaces.
+2021-02-22 13:11:28.754 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:249 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2021-02-22 13:11:28.755 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2021-02-22 13:11:28.881 INFO  org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport Line:348 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.seckill.springbootseckill.repository.SeckillRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2021-02-22 13:11:28.882 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 9ms. Found 0 Redis repository interfaces.
+2021-02-22 13:11:29.869 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:335 - Bean 'redisConfig' of type [com.seckill.springbootseckill.config.RedisConfig$$EnhancerBySpringCGLIB$$ddb2068f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-02-22 13:11:30.536 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:108 - Tomcat initialized with port(s): 8084 (http)
+2021-02-22 13:11:30.554 INFO  org.apache.catalina.core.StandardService Line:173 - Starting service [Tomcat]
+2021-02-22 13:11:30.555 INFO  org.apache.catalina.core.StandardEngine Line:173 - Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-02-22 13:11:30.747 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring embedded WebApplicationContext
+2021-02-22 13:11:30.747 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Line:285 - Root WebApplicationContext: initialization completed in 6644 ms
+2021-02-22 13:11:31.467 INFO  org.hibernate.jpa.internal.util.LogHelper Line:31  - HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-02-22 13:11:31.650 INFO  org.hibernate.Version Line:44  - HHH000412: Hibernate ORM core version 5.4.25.Final
+2021-02-22 13:11:32.687 INFO  org.hibernate.annotations.common.Version Line:56  - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-02-22 13:11:32.885 INFO  com.zaxxer.hikari.HikariDataSource Line:110 - HikariPool-1 - Starting...
+2021-02-22 13:11:33.362 INFO  com.zaxxer.hikari.HikariDataSource Line:123 - HikariPool-1 - Start completed.
+2021-02-22 13:11:33.376 INFO  org.hibernate.dialect.Dialect Line:175 - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-02-22 13:11:34.519 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator Line:52  - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-02-22 13:11:34.526 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:419 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-02-22 13:11:37.837 INFO  org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Line:58  - Exposing 2 endpoint(s) beneath base path '/actuator'
+2021-02-22 13:11:38.680 INFO  org.redisson.Version Line:41  - Redisson 2.11.5
+2021-02-22 13:11:40.886 INFO  org.redisson.connection.pool.MasterConnectionPool Line:145 - 10 connections initialized for /127.0.0.1:6379
+2021-02-22 13:11:40.885 INFO  org.redisson.connection.pool.MasterPubSubConnectionPool Line:145 - 1 connections initialized for /127.0.0.1:6379
+2021-02-22 13:11:40.967 INFO  springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping Line:69  - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2021-02-22 13:11:41.125 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:181 - Initializing ExecutorService 'applicationTaskExecutor'
+2021-02-22 13:11:42.601 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Line:181 - Initializing ExecutorService
+2021-02-22 13:11:42.704 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:220 - Tomcat started on port(s): 8084 (http) with context path ''
+2021-02-22 13:11:42.706 INFO  springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper Line:147 - Context refreshed
+2021-02-22 13:11:42.809 INFO  springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper Line:150 - Found 1 custom documentation plugin(s)
+2021-02-22 13:11:42.987 INFO  springfox.documentation.spring.web.scanners.ApiListingReferenceScanner Line:41  - Scanning for api listing references
+2021-02-22 13:11:43.364 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:61  - Started SpringbootSeckillApplication in 22.32 seconds (JVM running for 24.654)
+2021-02-22 13:11:43.381 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:19  - 项目启动
+2021-02-22 13:11:43.901 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-02-22 13:11:43.903 INFO  org.springframework.web.servlet.DispatcherServlet Line:525 - Initializing Servlet 'dispatcherServlet'
+2021-02-22 13:11:43.916 INFO  org.springframework.web.servlet.DispatcherServlet Line:547 - Completed initialization in 12 ms
+2021-02-22 13:11:44.418 INFO  org.apache.activemq.broker.jmx.ManagementContext Line:171 - JMX consoles can connect to service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi
+2021-02-22 13:11:44.477 INFO  org.apache.activemq.broker.BrokerService Line:689 - Using Persistence Adapter: MemoryPersistenceAdapter
+2021-02-22 13:11:44.516 INFO  org.springframework.kafka.listener.KafkaMessageListenerContainer Line:292 - 0: partitions assigned: [seckillKafka-0]
+2021-02-22 13:11:44.655 INFO  org.apache.activemq.broker.BrokerService Line:752 - Apache ActiveMQ 5.15.14 (localhost, ID:DESKTOP-K5GNTI1-9462-1613970704505-0:1) is starting
+2021-02-22 13:11:44.683 INFO  org.apache.activemq.broker.BrokerService Line:779 - Apache ActiveMQ 5.15.14 (localhost, ID:DESKTOP-K5GNTI1-9462-1613970704505-0:1) started
+2021-02-22 13:11:44.684 INFO  org.apache.activemq.broker.BrokerService Line:780 - For help or more information please see: http://activemq.apache.org
+2021-02-22 13:11:44.737 INFO  org.apache.activemq.broker.TransportConnector Line:265 - Connector vm://localhost started
+2021-02-22 13:12:55.116 INFO  com.seckill.springbootseckill.controller.CreateHtmlController Line:27  - 生成秒杀活动静态页
+2021-02-22 13:15:55.445 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:55  - Starting SpringbootSeckillApplication on DESKTOP-K5GNTI1 with PID 3008 (D:\codes\repositories\seckill\target\classes started by 迪达勒斯 in D:\codes\repositories\seckill)
+2021-02-22 13:15:55.448 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:651 - No active profile set, falling back to default profiles: default
+2021-02-22 13:15:56.427 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:249 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2021-02-22 13:15:56.427 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-02-22 13:15:56.480 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 47ms. Found 1 JPA repository interfaces.
+2021-02-22 13:15:56.488 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:249 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2021-02-22 13:15:56.489 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2021-02-22 13:15:56.503 INFO  org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport Line:348 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.seckill.springbootseckill.repository.SeckillRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2021-02-22 13:15:56.504 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 9ms. Found 0 Redis repository interfaces.
+2021-02-22 13:15:56.834 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:335 - Bean 'redisConfig' of type [com.seckill.springbootseckill.config.RedisConfig$$EnhancerBySpringCGLIB$$ab7b75f4] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-02-22 13:15:57.087 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:108 - Tomcat initialized with port(s): 8084 (http)
+2021-02-22 13:15:57.094 INFO  org.apache.catalina.core.StandardService Line:173 - Starting service [Tomcat]
+2021-02-22 13:15:57.094 INFO  org.apache.catalina.core.StandardEngine Line:173 - Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-02-22 13:15:57.208 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring embedded WebApplicationContext
+2021-02-22 13:15:57.209 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Line:285 - Root WebApplicationContext: initialization completed in 1719 ms
+2021-02-22 13:15:57.501 INFO  org.hibernate.jpa.internal.util.LogHelper Line:31  - HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-02-22 13:15:57.526 INFO  org.hibernate.Version Line:44  - HHH000412: Hibernate ORM core version 5.4.25.Final
+2021-02-22 13:15:57.600 INFO  org.hibernate.annotations.common.Version Line:56  - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-02-22 13:15:57.672 INFO  com.zaxxer.hikari.HikariDataSource Line:110 - HikariPool-1 - Starting...
+2021-02-22 13:15:57.764 INFO  com.zaxxer.hikari.HikariDataSource Line:123 - HikariPool-1 - Start completed.
+2021-02-22 13:15:57.770 INFO  org.hibernate.dialect.Dialect Line:175 - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-02-22 13:15:58.152 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator Line:52  - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-02-22 13:15:58.156 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:419 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-02-22 13:15:59.130 INFO  org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Line:58  - Exposing 2 endpoint(s) beneath base path '/actuator'
+2021-02-22 13:15:59.269 INFO  org.redisson.Version Line:41  - Redisson 2.11.5
+2021-02-22 13:16:00.423 INFO  org.redisson.connection.pool.MasterConnectionPool Line:145 - 10 connections initialized for /127.0.0.1:6379
+2021-02-22 13:16:00.423 INFO  org.redisson.connection.pool.MasterPubSubConnectionPool Line:145 - 1 connections initialized for /127.0.0.1:6379
+2021-02-22 13:16:00.459 INFO  springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping Line:69  - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2021-02-22 13:16:00.575 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:181 - Initializing ExecutorService 'applicationTaskExecutor'
+2021-02-22 13:16:01.100 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Line:181 - Initializing ExecutorService
+2021-02-22 13:16:01.115 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:220 - Tomcat started on port(s): 8084 (http) with context path ''
+2021-02-22 13:16:01.116 INFO  springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper Line:147 - Context refreshed
+2021-02-22 13:16:01.125 INFO  springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper Line:150 - Found 1 custom documentation plugin(s)
+2021-02-22 13:16:01.150 INFO  springfox.documentation.spring.web.scanners.ApiListingReferenceScanner Line:41  - Scanning for api listing references
+2021-02-22 13:16:01.268 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:61  - Started SpringbootSeckillApplication in 6.347 seconds (JVM running for 7.448)
+2021-02-22 13:16:01.272 INFO  com.seckill.springbootseckill.SpringbootSeckillApplication Line:19  - 项目启动
+2021-02-22 13:16:01.320 INFO  org.springframework.kafka.listener.KafkaMessageListenerContainer Line:292 - 0: partitions assigned: [seckillKafka-0]
+2021-02-22 13:16:01.681 INFO  org.apache.activemq.broker.BrokerService Line:689 - Using Persistence Adapter: MemoryPersistenceAdapter
+2021-02-22 13:16:01.696 INFO  org.apache.activemq.broker.jmx.ManagementContext Line:171 - JMX consoles can connect to service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi
+2021-02-22 13:16:01.802 INFO  org.apache.activemq.broker.BrokerService Line:752 - Apache ActiveMQ 5.15.14 (localhost, ID:DESKTOP-K5GNTI1-9606-1613970961687-0:1) is starting
+2021-02-22 13:16:01.806 INFO  org.apache.activemq.broker.BrokerService Line:779 - Apache ActiveMQ 5.15.14 (localhost, ID:DESKTOP-K5GNTI1-9606-1613970961687-0:1) started
+2021-02-22 13:16:01.806 INFO  org.apache.activemq.broker.BrokerService Line:780 - For help or more information please see: http://activemq.apache.org
+2021-02-22 13:16:01.827 INFO  org.apache.activemq.broker.TransportConnector Line:265 - Connector vm://localhost started
+2021-02-22 13:16:02.404 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-02-22 13:16:02.405 INFO  org.springframework.web.servlet.DispatcherServlet Line:525 - Initializing Servlet 'dispatcherServlet'
+2021-02-22 13:16:02.414 INFO  org.springframework.web.servlet.DispatcherServlet Line:547 - Completed initialization in 9 ms
+2021-02-22 13:16:16.818 INFO  com.seckill.springbootseckill.controller.CreateHtmlController Line:27  - 生成秒杀活动静态页
