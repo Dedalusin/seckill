@@ -91,7 +91,7 @@ public class SeckillPageController {
 //        	Destination destination = new ActiveMQQueue("seckill.queue");
 //        	activeMQSender.sendChannelMess(destination,1000+";"+1);
             LOGGER.info("验证通过");
-            kafkaSender.sendMessage("seckill",1000+";"+6);
+            kafkaSender.sendMessage("seckillKafka",1000+";"+6);
         	return Result.ok();
         }else{
             LOGGER.info("验证失败");
